@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="example.app">
+
+  <!-- configure your content components here -->
+  
+  <!-- -*- extra stuff goes here -*- -->
+  <class class=".venue.Venue">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IVenue"
+        />
+  </class>
+  <class class=".info.Info">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IInfo"
+        />
+  </class>
+
+</configure>

@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="context/main_template/macros/master">
+
+      <metal:slot fill-slot="style_slot">
+        <style type="text/css">
+          #map-canvas {
+            height: 400px;
+            width:400px;
+            text-align: center;
+            margin-right: auto;
+            margin-left: auto
+          }
+        </style>
+      </metal:slot>
+      
+      <metal:slot fill-slot="javascript_head_slot">
+        <script type="text/javascript"
+        src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'>
+        </script>
+        
+        <script type="text/javascript" tal:content="string:
+          function initialize(){
+            var point = new google.maps.LatLng(${view/latitude}, ${view/longitude});
+            var mapOptions = {
+              center: point,
+              zoom: 16,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+            var marker = new google.maps.Marker({
+              position: point,
+              map: map,
+              title: '${view/point_title}',
+            });
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);">
+          </script>
+      </metal:slot>
+
+
+    <metal:block fill-slot="content-core">
+        <div>
+            <div>Широта
+              <span tal:content="view/latitude">
+              </span>
+            </div>
+            <div>Довгота
+              <span tal:content="view/longitude">
+              </span>
+            </div>
+        </div>
+        <div id="map-canvas"></div>
+    </metal:block>
+</html>

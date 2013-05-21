@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="context/main_template/macros/master">
+
+    <metal:block fill-slot="content-core">
+        <div>
+            <h1 tal:content="view/title"></h1>
+            <p tal:content="view/description">
+            </p>
+        </div>
+        <ul tal:repeat="venue view/venues">
+          <li tal:content="venue/title">
+          </li>
+        </ul>
+    </metal:block>
+
+</html>

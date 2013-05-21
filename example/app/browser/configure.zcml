@@ -1,0 +1,31 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="example.app">
+
+  <include package="plone.app.contentmenu" />
+
+  <!-- -*- extra stuff goes here -*- -->
+
+    <browser:page
+        name="info_form"
+        for="*"
+        permission="zope2.View"
+        class=".info_form.InfoFormView"
+    />
+    <browser:page
+        name="info_view"
+        for="*"
+        permission="zope2.View"
+        class=".info_view.InfoView"
+    />
+
+    <browser:page
+        name="venue_view"
+        for="*"
+        permission="zope2.View"
+        class=".venue_view.VenueView"
+    />
+
+
+</configure>
