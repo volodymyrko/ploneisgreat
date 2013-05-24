@@ -12,32 +12,11 @@ from example.app import appMessageFactory as _
 
 from zope.i18nmessageid import MessageFactory
 __ = MessageFactory("plone")
+import json
 
-def test(*args):
-    points = ''
-    p_template = """
-    var point = new google.maps.LatLng{point};
-    var marker = new google.maps.Marker({{
-              position: point,
-              map: map,
-              title: '{point_title}',
-            }});
-    """
-
-    obj = args[0]
-    venues = obj.venues
-    if not len(venues):
-        point1 = (venues[0].latitude, venues[0].longitude)
-
-        for p in venues:
-            points += p_template.format(point=(p.latitude, p.longitude),
-                point_title=p.title)
-    else:
-        return ''
-
-    return """
-    <style type="text/css">
-    #map-canvas {{
+MAP_TEMPLATE = """
+  <style type="text/css">
+        #map-canvas {{
             height: 300px;
             width: 300px;
             text-align: center;
@@ -45,44 +24,67 @@ def test(*args):
             margin-left: auto
           }}
     </style>
-      
     <script type="text/javascript"
         src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'>
     </script>
-
     <script type="text/javascript">
-          function initialize(){{
-            var point = new google.maps.LatLng{point1};
+        function initialize(){{
+            var points = {points};
+            var point = new google.maps.LatLng(points[0]['lat'], points[0]['lon']);
             var mapOptions = {{
-              center: point,
-              zoom: 12,
-              mapTypeId: google.maps.MapTypeId.ROADMAP
+                center: point,
+                zoom: 14,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
             }};
-
             var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            
 
-            {point_list}
+            bounds  = new google.maps.LatLngBounds();
 
+            for(var i=0; i<points.length; i++){{
+                console.log('ff');
+                var point = new google.maps.LatLng(points[i]['lat'], points[i]['lon']);
+                bounds.extend(point);
+                var marker = new google.maps.Marker({{
+                    position: point,
+                    map: map,
+                    title: points[i]['name'],
+                }})
             }}
-            google.maps.event.addDomListener(window, 'load', initialize)
-          </script>
+    
+            map.fitBounds(bounds);
+            map.panToBounds(bounds);
+            google.maps.event.addListener(map, 'zoom_changed', function(){{
+                if ( points.length ===  1) {{
+                    console.log(map.zoom);
+                    map.zoom = 14;
+                }}
+            }})
+
+        }}
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 
 
-    <dl class="portlet portletInfoPortlet" i18n:domain="example.app">
-
-    <dt class="portletHeader">
-        <span class="portletTopLeft"></span>
-        <span>
-           Google Map
-        </span>
-        <span class="portletTopRight"></span>
-    </dt>
 
     <div id="map-canvas"></div>
-    """.format(point1=point1, point_list=points)
-    
+    """
 
+def render_map(*args):
+    points = []
+    obj = args[0]
+    venues = obj.venues
+    if not len(venues):
+        return ''
+    for p in venues:
+        points.append({
+            'lat': p.latitude,
+            'lon': p.longitude,
+            'name': p.title,
+            })
 
+    return MAP_TEMPLATE.format(points=json.dumps(points))
 
 
 class IInfoPortlet(IPortletDataProvider):
@@ -139,7 +141,7 @@ class Renderer(base.Renderer):
     of this class. Other methods can be added and referenced in the template.
     """
 
-    render = test
+    render = render_map
     #ViewPageTemplateFile('infoportlet.pt')
 
     def __init__(self, *args):

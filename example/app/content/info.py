@@ -15,24 +15,6 @@ from example.app.config import PROJECTNAME
 InfoSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     # -*- Your Archetypes field definitions here ... -*-
-    atapi.StringField(
-        name='info_title',
-        required=True,
-        widget=atapi.StringWidget(
-            label='Title',
-            description='Please enter title.',
-            visible= {'view': 'visible', 'edit': 'visible'},
-        ),
-    ),
-    atapi.StringField(
-        name='info_desc',
-        required=True,
-        widget=atapi.StringWidget(
-            label='Desc',
-            description='Please enter desc.',
-            visible= {'view': 'visible', 'edit': 'visible'},
-        ),
-    ),
     atapi.ReferenceField('VenueReferenceField',
         relationship = 'venuerelationship',
         multiValued = 'True',

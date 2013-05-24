@@ -7,7 +7,7 @@ class InfoView(BrowserView):
 
     def __call__(self):
         """"""
-        self.title = getattr(self.context, 'info_title', '')
-        self.description = getattr(self.context, 'info_desc', '')
+        self.title = getattr(self.context, 'title', '')
+        self.description = getattr(self.context, 'description', '')
         self.venues = self.context.getVenueReferenceField()
         return self.template()

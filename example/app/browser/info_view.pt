@@ -10,7 +10,9 @@
             </p>
         </div>
         <ul tal:repeat="venue view/venues">
-          <li tal:content="venue/title">
+          <li>
+            <a tal:attributes="href venue/absolute_url" tal:content="venue/title">
+            </a>
           </li>
         </ul>
     </metal:block>

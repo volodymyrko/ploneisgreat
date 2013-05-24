@@ -8,12 +8,6 @@
   <!-- -*- extra stuff goes here -*- -->
 
     <browser:page
-        name="info_form"
-        for="*"
-        permission="zope2.View"
-        class=".info_form.InfoFormView"
-    />
-    <browser:page
         name="info_view"
         for="*"
         permission="zope2.View"
